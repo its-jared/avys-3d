@@ -1,14 +1,19 @@
 use bevy::{prelude::*, window::{WindowMode, WindowResolution}};
 use game::GamePlugin;
+use update::check_for_updates;
 
 pub mod data;
 pub mod game;
 pub mod level;
 pub mod player;
+pub mod update;
 
 fn main() {
-    let game_config = data::fetch_config_data();
+    let game_config = data::fetch_config_data();    
     let mut window_mode = WindowMode::Windowed;
+
+    check_for_updates(&game_config)
+        .expect("Error when checking for updates!");
 
     if game_config.fullscreen {
         window_mode = WindowMode::BorderlessFullscreen(MonitorSelection::Primary);

@@ -25,7 +25,7 @@ pub fn fetch_config_data() -> GameConfig {
     println!("Loading GameConfig from: {}", data_path);
 
     let raw = read_to_string(data_path)
-        .expect("Error when reading raw string from GameConfig file.");
+        .expect("Error when reading raw string from GameConfig file!");
     let val: GameConfig = ron::from_str(raw.as_str()).unwrap();
 
     val
