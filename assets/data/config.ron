@@ -1,0 +1,12 @@
+GameConfig(
+    window_size: (1000.0, 600.0),
+    window_title: "Avys 3d - Indev",
+    fullscreen: false, 
+    
+    name: "Avys",
+    version: (0, 1, 0),
+
+    defaults: GameConfigDefaults(
+        infinite_terrian: true,
+    ),
+)
