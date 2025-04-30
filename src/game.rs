@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_panorbit_camera::PanOrbitCameraPlugin;
 
 use crate::{level::LevelPlugin, player::PlayerPlugin};
 

@@ -1,40 +1,58 @@
-use bevy::{core_pipeline::{bloom::Bloom, tonemapping::Tonemapping, Skybox}, pbr::{Atmosphere, AtmosphereSettings}, prelude::*};
-use bevy_panorbit_camera::PanOrbitCamera;
+use bevy::prelude::*;
+
+#[derive(Component)]
+pub struct Player;
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_player);
+        app
+            .add_systems(Startup, setup_player)
+            .add_systems(Update, move_player);
     }
 }
 
-fn setup_player(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-) {
-    let night_sky = asset_server.load("textures/night_sky.jpg");
-
+fn setup_player(mut commands: Commands) {
     commands.spawn((
         Camera3d::default(),
-        Camera {
-            hdr: true,
-            clear_color: ClearColorConfig::None,
-            ..default()
-        },
-        Skybox {
-            image: night_sky,
-            brightness: 500.0,
-            rotation: Quat::default(),
-        },
-        Tonemapping::AcesFitted,
-        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-        Bloom::NATURAL,
-        Atmosphere::EARTH,
-        AtmosphereSettings {
-            aerial_view_lut_max_distance: 3.2e5,
-            scene_units_to_m: 1e+4,
-            ..Default::default()
-        },
-
+        Transform::from_xyz(0.0, 1000.0, 0.0).looking_at(Vec3::ZERO, Vec3::Y),
+        Player,
     ));
+}
+
+fn move_player(
+    keys: Res<ButtonInput<KeyCode>>,
+    time: Res<Time>,
+    mut player_q: Query<&mut Transform, With<Player>>,
+) -> Result<(), BevyError> {
+    let mut player_transform = player_q.single_mut()?;
+    let mut move_dir = Vec3::ZERO;
+    let speed = 1000.0;
+
+    if keys.pressed(KeyCode::KeyW) {
+        move_dir.x = -speed;
+    }
+    if keys.pressed(KeyCode::KeyS) {
+        move_dir.x = speed;
+    }
+
+    if keys.pressed(KeyCode::KeyA) {
+        move_dir.z = speed;
+    }
+    if keys.pressed(KeyCode::KeyD) {
+        move_dir.z = -speed;
+    }
+
+    if keys.pressed(KeyCode::ShiftLeft) || keys.pressed(KeyCode::ShiftRight) {
+        move_dir.y = -speed;
+    }
+    if keys.pressed(KeyCode::Space) {
+        move_dir.y = speed;
+    }
+
+    if move_dir != Vec3::ZERO {
+        player_transform.translation += move_dir * time.delta_secs();
+    }
+
+    Ok(())
 }
