@@ -6,6 +6,7 @@ use std::fs::read_to_string;
 pub struct GameConfigDefaults {
     pub infinite_terrian: bool,
     pub look_at_origin: bool,
+    pub check_for_updates: bool,
 }
 
 #[derive(Resource, Debug, Deserialize, Serialize)]

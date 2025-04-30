@@ -1,3 +1,6 @@
+// Using build args will override the defaults at runtime,
+// this file is never altered. 
+ 
 GameConfig(
     window_size: (1000.0, 600.0),
     window_title: "Avys 3d - Indev",
@@ -8,6 +11,7 @@ GameConfig(
 
     defaults: GameConfigDefaults(
         infinite_terrian: true,
-        look_at_origin: true,
+        look_at_origin: false,
+        check_for_updates: true,
     ),
 )

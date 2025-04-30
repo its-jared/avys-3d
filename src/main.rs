@@ -1,3 +1,4 @@
+use args::handle_args;
 use bevy::{prelude::*, window::{WindowMode, WindowResolution}};
 use game::GamePlugin;
 use update::check_for_updates;
@@ -7,9 +8,10 @@ pub mod game;
 pub mod level;
 pub mod player;
 pub mod update;
+pub mod args;
 
 fn main() {
-    let game_config = data::fetch_config_data();    
+    let game_config = handle_args(data::fetch_config_data());    
     let mut window_mode = WindowMode::Windowed;
 
     check_for_updates(&game_config)

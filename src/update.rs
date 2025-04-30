@@ -13,8 +13,13 @@ pub struct UpdateData {
 pub fn check_for_updates(current_config: &GameConfig) -> Result<bool, ureq::Error> {
     println!("Checking for updates from: {}", ONLINE_CONFIG_PATH);
 
-    if check_internet_connection() != true {
+    if !check_internet_connection() {
         println!("No internet!");
+        return Ok(false);
+    }
+
+    if !current_config.defaults.check_for_updates {
+        println!("Update checker disabled.");
         return Ok(false);
     }
 
