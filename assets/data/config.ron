@@ -8,5 +8,6 @@ GameConfig(
 
     defaults: GameConfigDefaults(
         infinite_terrian: true,
+        look_at_origin: true,
     ),
 )

@@ -1,6 +1,14 @@
+use serde::{Deserialize, Serialize};
+
 use crate::data::GameConfig;
 
-pub const ONLINE_CONFIG_PATH: &str = "https://raw.githubusercontent.com/its-jared/avys-3d/refs/heads/master/assets/data/config.ron";
+pub const ONLINE_CONFIG_PATH: &str = "https://raw.githubusercontent.com/its-jared/avys-3d/refs/heads/master/assets/data/update.ron";
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UpdateData {
+    pub name: String, 
+    pub version: (i32, i32, i32),
+}
 
 pub fn check_for_updates(current_config: &GameConfig) -> Result<bool, ureq::Error> {
     println!("Checking for updates from: {}", ONLINE_CONFIG_PATH);
@@ -16,7 +24,7 @@ pub fn check_for_updates(current_config: &GameConfig) -> Result<bool, ureq::Erro
         .call()?
         .body_mut()
         .read_to_string()?;
-    let online_config: GameConfig = ron::from_str(raw_online_config.as_str()).unwrap();
+    let online_config: UpdateData = ron::from_str(raw_online_config.as_str()).unwrap();
 
     if online_config.version.0 > current_config.version.0 {
         update_needed = true;
