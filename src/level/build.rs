@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::mesh::VertexAttributeValues};
+use bevy::{math::ops::powf, prelude::*, render::mesh::VertexAttributeValues};
 use noise::{BasicMulti, NoiseFn, Perlin};
 
 use crate::level::Chunk;
@@ -40,7 +40,7 @@ impl Command for BuildChunk {
         if let Some(VertexAttributeValues::Float32x3(positions))
             = terrain.attribute_mut(Mesh::ATTRIBUTE_POSITION) {
             for pos in positions.iter_mut() {
-                let val = noise.get([
+                let mut val = noise.get([
                     (pos[0] as f64
                         + (mesh_size as f64
                             * self.0.x as f64))
@@ -50,6 +50,8 @@ impl Command for BuildChunk {
                             * self.0.y as f64))
                         / 300.,
                 ]);
+
+                val = powf(val as f32, 2.0) as f64;
     
                 pos[1] = val as f32 * terrain_height;
             }
