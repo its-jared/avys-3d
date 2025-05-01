@@ -5,6 +5,7 @@ use crate::data::GameConfig;
 
 pub mod build;
 pub mod infinite;
+pub mod gen_data;
 
 #[derive(Resource)]
 pub struct ChunkStore(pub HashMap<IVec2, Handle<Mesh>>);

@@ -1,0 +1,46 @@
+GenData(
+    // used in combo with temp, moisture, and height. 
+    biome_noise: NoiseData(
+        scale: 0.5,
+        ampli: 0.2,
+        offs: 0.0,
+    ),
+    temp_noise: NoiseData(
+        scale: 0.005, 
+        ampli: 2.,
+        offs: 200.0,
+    )
+    mois_noise: NoiseData(
+        scale: 0.02, 
+        ampli: 0.5,
+        offs: -200.0
+    ),
+    heig_noise: NoiseData(
+        scale: 0.02, 
+        ampli: 0.5,
+        offs: -200.0
+    ),
+
+    biomes: {
+        BiomeData(
+            name: "Meadow",
+            id: 0,
+
+            temp_range: (-0.5, 0.5),
+            mois_range: (-0.5, 0.5),
+            heig_range: (-1, 1),
+
+            grass_color: (20.0, 20.0, 20.0),
+        ),
+        BiomeData(
+            name: "Desert",
+            id: 1,
+
+            temp_range: (0.0, 1.0),
+            mois_range: (-1.0, 0.0),
+            heig_range: (-1, 1),
+
+            grass_color: (255.0, 255.0, 255.0),
+        ),
+    },
+)

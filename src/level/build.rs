@@ -1,13 +1,35 @@
 use bevy::{math::ops::powf, prelude::*, render::mesh::VertexAttributeValues};
 use noise::{BasicMulti, NoiseFn, Perlin};
 
-use crate::level::Chunk;
+use crate::level::{gen_data::GenData, Chunk};
 
-use super::ChunkStore;
+use super::{gen_data::BiomeData, ChunkStore};
+
+fn get_biome(
+    gen_data: &GenData, 
+    noise: &BasicMulti<Perlin>, 
+    pos: IVec2
+) -> BiomeData {
+    let biome_noise = noise.get([
+        (pos.x as i64 + gen_data.biome_noise.offs) * gen_data.biome_noise.scale,
+        (pos.y as i64 + gen_data.biome_noise.offs) * gen_data.biome_noise.scale,
+        0.0
+    ]);
+
+    for biome in gen_data.biomes {
+
+    }
+
+    ()
+}
 
 pub struct BuildChunk(pub IVec2);
 impl Command for BuildChunk {
     fn apply(self, world: &mut World) -> () {
+        let gen_data = world
+            .get_resource::<GenData>()
+            .expect("GenData to be available");
+
         if world
             .get_resource_mut::<ChunkStore>()
             .expect("ChunkStore to be available")
