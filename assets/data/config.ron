@@ -13,5 +13,6 @@ GameConfig(
         infinite_terrian: true,
         look_at_origin: false,
         check_for_updates: true,
+        daynight_cycle: false,
     ),
 )

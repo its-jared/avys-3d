@@ -21,7 +21,8 @@ impl Plugin for LevelPlugin {
             .add_systems(Startup, build::setup_world)
             .add_systems(Update, (
                 build::dynamic_scene,
-                infinite::manage_chunks.run_if(resource_exists::<GameConfig>)
+                infinite::manage_chunks)
+                .run_if(resource_exists::<GameConfig>
             ));
     }
 }

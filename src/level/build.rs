@@ -3,7 +3,7 @@ use std::f32::consts::PI;
 use bevy::{math::ops::powf, pbr::{light_consts::lux, CascadeShadowConfigBuilder}, prelude::*, render::mesh::VertexAttributeValues};
 use noise::{BasicMulti, NoiseFn, Perlin};
 
-use crate::level::{gen_data::GenData, Chunk};
+use crate::{data::GameConfig, level::{gen_data::GenData, Chunk}};
 
 use super::{gen_data::BiomeData, ChunkStore};
 
@@ -154,6 +154,7 @@ pub fn setup_world(mut commands: Commands) {
     }
     .build();
 
+
     commands.spawn((
         DirectionalLight {
             shadows_enabled: true,
@@ -165,8 +166,16 @@ pub fn setup_world(mut commands: Commands) {
     ));
 }
 
-// This is taken from bevy's example, this will be changed to actually match day / night cycles. 
-pub fn dynamic_scene(mut suns: Query<&mut Transform, With<DirectionalLight>>, time: Res<Time>) {
+// Used for testing, to be changed when day / night cycles are added.
+pub fn dynamic_scene(
+    mut suns: Query<&mut Transform, With<DirectionalLight>>, 
+    time: Res<Time>,
+    config: Res<GameConfig>
+) {
+    if !config.defaults.daynight_cycle {
+        return;
+    }
+
     suns.iter_mut()
         .for_each(|mut tf| tf.rotate_x(-time.delta_secs() * PI / 10.0));
 }
