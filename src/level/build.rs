@@ -1,11 +1,13 @@
-use bevy::{math::ops::powf, prelude::*, render::mesh::VertexAttributeValues};
+use std::f32::consts::PI;
+
+use bevy::{math::ops::powf, pbr::{light_consts::lux, CascadeShadowConfigBuilder}, prelude::*, render::mesh::VertexAttributeValues};
 use noise::{BasicMulti, NoiseFn, Perlin};
 
 use crate::level::{gen_data::GenData, Chunk};
 
 use super::{gen_data::BiomeData, ChunkStore};
 
-fn get_biome(
+/*fn get_biome(
     gen_data: &GenData, 
     noise: &BasicMulti<Perlin>, 
     pos: IVec2
@@ -21,14 +23,14 @@ fn get_biome(
     }
 
     ()
-}
+}*/
 
 pub struct BuildChunk(pub IVec2);
 impl Command for BuildChunk {
     fn apply(self, world: &mut World) -> () {
-        let gen_data = world
+        /*let gen_data = world
             .get_resource::<GenData>()
-            .expect("GenData to be available");
+            .expect("GenData to be available");*/
 
         if world
             .get_resource_mut::<ChunkStore>()
@@ -144,4 +146,27 @@ pub fn setup_world(mut commands: Commands) {
     commands.queue(BuildChunk(IVec2::new(1, -1)));
     commands.queue(BuildChunk(IVec2::new(1, 0)));
     commands.queue(BuildChunk(IVec2::new(1, 1)));
+
+    let cascade_shadow_config = CascadeShadowConfigBuilder {
+        first_cascade_far_bound: 0.3,
+        maximum_distance: 3.0,
+        ..default()
+    }
+    .build();
+
+    commands.spawn((
+        DirectionalLight {
+            shadows_enabled: true,
+            illuminance: lux::RAW_SUNLIGHT,
+            ..default()
+        },
+        Transform::from_xyz(1.0, -0.4, 0.0).looking_at(Vec3::ZERO, Vec3::Y),
+        cascade_shadow_config,
+    ));
+}
+
+// This is taken from bevy's example, this will be changed to actually match day / night cycles. 
+pub fn dynamic_scene(mut suns: Query<&mut Transform, With<DirectionalLight>>, time: Res<Time>) {
+    suns.iter_mut()
+        .for_each(|mut tf| tf.rotate_x(-time.delta_secs() * PI / 10.0));
 }

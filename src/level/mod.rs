@@ -19,6 +19,9 @@ impl Plugin for LevelPlugin {
         app
             .insert_resource(ChunkStore(HashMap::default()))
             .add_systems(Startup, build::setup_world)
-            .add_systems(Update, infinite::manage_chunks.run_if(resource_exists::<GameConfig>));
+            .add_systems(Update, (
+                build::dynamic_scene,
+                infinite::manage_chunks.run_if(resource_exists::<GameConfig>)
+            ));
     }
 }
